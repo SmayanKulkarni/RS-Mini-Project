@@ -56,7 +56,7 @@ combined_features = hstack([tfidf_matrix, audio_scaled]).tocsr()
 save_npz('combined_features.npz', combined_features)
 
 # Fit and save NN model
-nn_model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=11)
+nn_model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=50)
 nn_model.fit(combined_features)
 joblib.dump(nn_model, 'nn_model.joblib')
 
