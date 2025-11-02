@@ -7,7 +7,7 @@ import ResultsGrid from './ResultsGrid';
 import { motion, AnimatePresence } from 'framer-motion'; 
 import './App.css';
 
-// Helper component for the Spotify Embed (Unchanged)
+// Helper component for the Spotify Embed
 const SpotifyEmbed = ({ trackId, height = 80 }) => {
     if (!trackId) {
         return <div className="spotify-embed-placeholder" style={{height: `${height}px`}}>Preview Not Available</div>;
@@ -27,7 +27,7 @@ const SpotifyEmbed = ({ trackId, height = 80 }) => {
     );
 };
 
-// Modal Loader Component (Unchanged)
+// Modal Loader Component
 const ModalLoader = () => {
     return (
         <div className="modal-loader">
@@ -42,13 +42,9 @@ const ModalLoader = () => {
 
 function App() {
     const [mode, setMode] = useState('song');
-    
-    // State is lifted up (Unchanged)
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    
-    // Modal State (Unchanged)
     const [activeSong, setActiveSong] = useState(null);
     const [metadata, setMetadata] = useState(null); 
     const [modalLoading, setModalLoading] = useState(false); 
@@ -56,7 +52,7 @@ function App() {
     // *** NEW: State to control the layout ***
     const [hasSearched, setHasSearched] = useState(false);
 
-    // handleCardClick (Unchanged)
+    // Function to open the modal
     const handleCardClick = async (song) => {
         setActiveSong(song);
         setModalLoading(true);
@@ -91,22 +87,20 @@ function App() {
         setModalLoading(false);
     };
 
-    // closeModal (Unchanged)
+    // Function to close the modal
     const closeModal = () => {
         setActiveSong(null);
         setMetadata(null);
     };
 
     return (
-        // *** CHANGED: Added dynamic class based on state ***
         <div className={`app-container ${hasSearched ? 'has-searched' : ''}`}>
             
             {/* === SIDEBAR === */}
-            {/* *** CHANGED: Wrapped in motion.div and added layout prop *** */}
             <motion.div 
                 className="sidebar" 
-                layout 
-                transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }} // Smooth ease
+                layout // This prop tells framer-motion to animate the layout change
+                transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }} 
             >
                 <header className="header">
                     <h1>VibeCheck 🎵</h1>
@@ -146,7 +140,7 @@ function App() {
                                 setLoading={setLoading}
                                 setError={setError}
                                 setActiveSong={setActiveSong} 
-                                setHasSearched={setHasSearched} // <-- NEW PROP
+                                setHasSearched={setHasSearched} // Pass the setter
                             />
                         </motion.div>
                     ) : (
@@ -162,17 +156,15 @@ function App() {
                                 setLoading={setLoading}
                                 setError={setError}
                                 setActiveSong={setActiveSong} 
-                                setHasSearched={setHasSearched} // <-- NEW PROP
+                                setHasSearched={setHasSearched} // Pass the setter
                             />
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </motion.div> {/* End of motion.div sidebar */}
+            </motion.div> 
 
             {/* === MAIN CONTENT (RESULTS) === */}
-            {/* *** CHANGED: Wrapped in AnimatePresence to fade in *** */}
             <AnimatePresence>
-                {/* Only render this section if a search has been initiated */}
                 {hasSearched && (
                     <motion.div 
                         className="main-content"
@@ -202,7 +194,6 @@ function App() {
                                 </motion.div>
                             )}
                             {results && !loading && (
-                                // *** CHANGED: Added style to make this fill height ***
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -219,7 +210,7 @@ function App() {
                 )}
             </AnimatePresence>
 
-            {/* === MODAL (Unchanged) === */}
+            {/* === MODAL === */}
             <AnimatePresence>
                 {activeSong && (
                     <motion.div
@@ -284,7 +275,7 @@ function App() {
     );
 }
 
-// *** VibeMeter Component (Unchanged) ***
+// VibeMeter Component
 const VibeMeter = ({ label, value }) => {
     const percentage = Math.round(value * 100);
     return (
@@ -296,6 +287,9 @@ const VibeMeter = ({ label, value }) => {
             <div className="vibe-bar-background">
                 <motion.div 
                     className="vibe-bar-foreground"
+                    style={{ 
+                        backgroundColor: percentage > 85 ? '#1DB954' : percentage > 70 ? '#FFFB65' : '#ff6b6b'
+                    }}
                     initial={{ width: 0 }}
                     animate={{ width: `${percentage}%` }}
                     transition={{ duration: 0.5, delay: 0.2 }}

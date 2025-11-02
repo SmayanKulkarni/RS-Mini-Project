@@ -3,10 +3,10 @@ import axios from 'axios';
 import { motion } from 'framer-motion'; 
 import { FaSmileBeam } from 'react-icons/fa'; 
 
-const API_URL = 'http://localhost:8000';
+// *** CHANGED: Use environment variable for API URL ***
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const moods = ["happy", "sad", "chill", "energetic", "live", "romantic"];
 
-// *** CHANGED: Accept setHasSearched prop ***
 function MoodRecommender({ setResults, setLoading, setError, setActiveSong, setHasSearched }) {
     const [mood, setMood] = useState('happy');
     const [tags, setTags] = useState('');
@@ -14,9 +14,7 @@ function MoodRecommender({ setResults, setLoading, setError, setActiveSong, setH
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         
-        // *** NEW: Trigger the animation ***
-        setHasSearched(true); 
-        
+        setHasSearched(true); // <-- Trigger animation
         setLoading(true);
         setError('');
         setActiveSong(null); 

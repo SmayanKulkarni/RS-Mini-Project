@@ -3,9 +3,9 @@ import axios from 'axios';
 import { motion } from 'framer-motion'; 
 import { FaSearch } from 'react-icons/fa'; 
 
-const API_URL = 'http://localhost:8000'; 
+// *** CHANGED: Use environment variable for API URL ***
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000'; 
 
-// *** CHANGED: Accept setHasSearched prop ***
 function SongRecommender({ setResults, setLoading, setError, setActiveSong, setHasSearched }) {
     const [song, setSong] = useState('');
     const [artist, setArtist] = useState('');
@@ -13,9 +13,7 @@ function SongRecommender({ setResults, setLoading, setError, setActiveSong, setH
     const handleSubmit = async (e) => {
         if (e) e.preventDefault(); 
         
-        // *** NEW: Trigger the animation ***
-        setHasSearched(true); 
-        
+        setHasSearched(true); // <-- Trigger animation
         setLoading(true);
         setError('');
         setActiveSong(null); 
